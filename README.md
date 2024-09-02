@@ -16,12 +16,13 @@ fusion reactivities by integration of cross section over a maxwellian velocity
 distribution. These could be cached, however for the sake of simplicity
 there is currently no caching functionality.
 
-#Web
-See /web/index.html for web front end using eCharts.js to dynamically visualize the data.
-Demo: https://surrette.net/fusion/
+### Web
+- Demo: https://surrette.net/fusion/
+- See /web/index.html for web front end using eCharts.js to dynamically visualize the data.
 
-### Systemm Dependencies
-- MacTex https://tug.org/mactex/mainpage2024.html. # On Windows use MiKTeX https://miktex.org/download
+
+### System Dependencies
+- MacTex https://tug.org/mactex/mainpage2024.html. On Windows use MiKTeX https://miktex.org/download
 - Python 3.X
 
 ### Installation
@@ -51,7 +52,7 @@ jupyter-lab lawson-criterion-paper.ipynb
 # The notebook should execute in full, generating all plots and tables.
 
 ```
--Windows - see Windows Setup.ps1 for PowerShell commands
+- Windows - see PowerShell commands in Windows Setup.ps1
 
 ### Credits
 The cross sections for the reactions,
