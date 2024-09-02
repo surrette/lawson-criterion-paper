@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+<head>
+  <meta charset="utf-8">
+   <!-- Bootstrap CSS -->
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+</head>
+<body style="height: 100%; margin: 0">
+	<!-- Modal: id="myModal" -->
+    <div
+      class="modal fade"
+      id="myModal"
+      tabindex="-1"
+      aria-labelledby="myModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="myModalLabel">Modal title</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body" id="myModalBody">
+            ...
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+      crossorigin="anonymous"
+    ></script>
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-5">
+				<h1 class="text-center">Fusion Energy Progress</h1>
+				<p>Data from Sam Wurzel and Scott Hsu: <a href='https://doi.org/10.1063/5.0083990'>Progress toward fusion energy breakeven and gain as measured against the Lawson criterion</a> (<a href='https://github.com/swurzel/lawson-criterion-paper'>GitHub</a>)</p>
+				X-Axis:
+				<select id="selectX" onchange="chartChange(TripleProduct)" class="form-select" aria-label="X-Axis">
+				  <option selected>Year</option>
+				  <option>Temperature</option>
+				</select>
+				Y-Axis:
+				<select id="selectY" onchange="chartChange(TripleProduct)" class="form-select" aria-label="Y-Axis">
+				  <option selected>Triple Product</option>
+				  <option>Temperature</option>
+				  <option>Density</option>
+				  <option>Time</option>
+				</select>
+				Scale
+				<select id="selectType" onchange="chartChange(TripleProduct)" class="form-select" aria-label="Scale Type">
+				  <option selected>Log</option>
+				  <option value="1">Linear</option>
+				</select>
+				<br>
+				<div class="form-check">
+				  <input id="checkIsConcept" onchange="chartChange(TripleProduct)" class="form-check-input" type="checkbox" value="">
+				  <label class="form-check-label" for="checkIsConcept">
+					Concept Breakthroughs Only
+				  </label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="container" style="height: 100%"></div>
+
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  
+  <!-- Uncomment this line if you want to dataTool extension
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.5.1/dist/extension/dataTool.min.js"></script>
+  -->
+  <!-- Uncomment this line if you want to use gl extension
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts-gl@2/dist/echarts-gl.min.js"></script>
+  -->
+  <!-- Uncomment this line if you want to echarts-stat extension
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts-stat@latest/dist/ecStat.min.js"></script>
+  -->
+  <!-- Uncomment this line if you want to echarts-graph-modularity extension
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts-graph-modularity@2/dist/echarts-graph-modularity.min.js"></script>
+  -->
+  <!-- Uncomment this line if you want to use map
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@4.9.0/map/js/world.js"></script>
+  -->
+  <!-- Uncomment these two lines if you want to use bmap extension
+  <script type="text/javascript" src="https://api.map.baidu.com/api?v=3.0&ak=YOUR_API_KEY"></script>
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5.5.1/dist/extension/bmap.min.js"></script>
+  -->
+  
+  <script type="text/javascript" src="./mcf_mif_icf_df.js"></script>
+  <script type="text/javascript" src="./experimental_result_df.js"></script>
+  <script type="text/javascript" src="./concept_dict.js"></script>
+  <script type="text/javascript" src="./script.js"></script>
+   <!-- Bootstrap Bundle with Popper -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+      crossorigin="anonymous"
+    ></script>
+	
+  <script type="text/javascript"> //Initial data load
+	var schemaData = schema.map((row, index)=> (row.name=='nTtauEstar_max') ? mcf_mif_icf_df[row.name] : experimental_result_df[row.name]);
+	var years = Object.values(experimental_result_df['Year']);
+	//extract data from mcf_mif_icf_df to be added to experimental_result_df
+	var Project_DisplayName = Object.values(mcf_mif_icf_df['Project Displayname']);
+	var nTtauEstar_max = Object.entries(mcf_mif_icf_df['nTtauEstar_max']).map(x=>x[1]);
+	var T_i_max = Object.entries(mcf_mif_icf_df['T_i_max']).map(x=>x[1]);
+	var n_i_max = Object.entries(mcf_mif_icf_df['n_i_max']).map(x=>x[1]);
+	var tau_E_star = Object.entries(mcf_mif_icf_df['tau_E_star']).map(x=>x[1]);
+	var p_stag = Object.entries(mcf_mif_icf_df['p_stag']).map(x=>x[1]);
+	var tau_stag = Object.entries(mcf_mif_icf_df['tau_stag']).map(x=>x[1]);
+	var ptau = Object.entries(mcf_mif_icf_df['ptau']).map(x=>x[1]);
+
+	var is_concept_record = Object.entries(mcf_mif_icf_df['is_concept_record']).map(x=>x[1]);
+	//Use Experimental Identifier for deterministic link between mcf_mif_icf_df and experimental_result_df
+	var mId = Object.entries(mcf_mif_icf_df['Experimental Identifier']).map((row, index)=> row[1]);
+	var eId = Object.entries(experimental_result_df['Experimental Identifier']).map((row, index)=>row[1]);
+
+	//Populate fields from mcf_mif_icf_df into experimental_result_df where needed
+	var TripleProduct = years.map((year,i) => schemaData.map((x,j) => (j==1) ? nTtauEstar_max[mId.indexOf(eId[i])] 
+																		: (j==2) ? (Project_DisplayName[mId.indexOf(eId[i])] + ((schemaData[8][i]=="Projected") ? '*' : ''))
+																		: (j==21) ? is_concept_record[mId.indexOf(eId[i])] 
+																		: (j==22) ? T_i_max[mId.indexOf(eId[i])] 
+																		: (j==23) ? ((n_i_max[mId.indexOf(eId[i])] == null) ?  nTtauEstar_max[mId.indexOf(eId[i])] / T_i_max[mId.indexOf(eId[i])] / (tau_stag[mId.indexOf(eId[i])] || 1) : n_i_max[mId.indexOf(eId[i])])  //Calculate ptau and nTtau_E for ICF and MCF experiments. 
+																			//|| 1 handles divide by zero case, but isn't acurate. Maybe filter out instead or find missing data point? 
+																		: (j==24) ? ((tau_E_star[mId.indexOf(eId[i])] == null) ?  tau_stag[mId.indexOf(eId[i])] : tau_E_star[mId.indexOf(eId[i])])
+																		: (j==28) ? nTtauEstar_max[mId.indexOf(eId[i])]
+																		: (typeof x === 'undefined') ? 0
+																		: x[i]));
+	TripleProduct= TripleProduct.filter(e => e[1] !== undefined); //filter out any undefined values (y-axis)
+
+	var dom = document.getElementById('container');
+    //initialize eChart
+	var myChart = echarts.init(dom, null, {
+      renderer: 'canvas',
+      useDirtyRect: false
+    });0
+    var app = {};
+    
+	//initial load of chart data
+	chartChange(TripleProduct);
+	
+	//listener for when a data point in chart is clicked display modal with details
+	myChart.on('click', function(params) {
+	  var value = params.value;
+	  var myModalLabel = document.getElementById('myModalLabel');
+	  var myModalBody = document.getElementById('myModalBody');
+	  
+	  myModalLabel.innerHTML='<h4><b>'+ value[4] + '</b><br>' + value[17] + '</h4>';
+	  myModalBody.innerHTML=getDetailsHTML(value, true);
+	  
+	  let myModal = new bootstrap.Modal(document.getElementById('myModal'), {});
+		
+		myModal.show();
+
+	});
+
+    window.addEventListener('resize', myChart.resize);
+  </script>
+</body>
+</html>

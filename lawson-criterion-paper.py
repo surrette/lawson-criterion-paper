@@ -41,6 +41,9 @@ import matplotlib.patches as patches
 from matplotlib import ticker
 from matplotlib.ticker import StrMethodFormatter, NullFormatter
 
+import json
+import csv
+
 # Import our library/utility fuctions
 from lib import latexutils
 from lib import fusionlib
@@ -151,60 +154,60 @@ if not os.path.exists('images'):
 
 print('Setup complete.')
 
-# %% [markdown] jp-MarkdownHeadingCollapsed=true
+# %% [markdown]
 # ## Table of variable names
 
 # %%
 definition_dict = {
-    '$E_{\rm abs}$': 'Externally applied energy absorbed by the fuel',
-    '$f_c$': 'Energy fraction of fusion products in charged particles',
-    '$n$': 'The generic density used to refer to either ion or electron density when $n_i=n_e$',
-    '$n_e$': 'Electron density',
-    '$n_{e0}$': 'Central electron density',
-    '$n_i$': 'Ion density',
-    '$n_{i0}$': 'Central ion density',
-    '$(nT\tau)_{\rm ig, hs}^{\rm ICF}$': 'Temperature-dependent triple product required to achieve ICF hot-spot ignition.', 
-    '$(n\tau)_{\rm ig, hs}^{\rm ICF}$': 'Temperature-dependent Lawson parameter required to achieve ICF hot-spot ignition.',
-    '$p$': 'Plasma thermal pressure',
-    '$P_{\rm abs}$': 'Externally applied power absorbed by the fuel',
-    '$P_{B}$': 'Bremsstrahlung power',
-    '$P_{c}$': 'Fusion power emitted as charged particles',
-    '$P_{\rm ext}$': 'Externally applied heating power',
-    '$P_{F}$': 'Fusion power',
-    '$P_{n}$': 'Fusion power emitted as neutrons',
-    '$P_{\rm out}$': 'Sum of all power exiting the plasma',
-    '$Q$': 'Generic energy gain. For MCF, this can refer to $Q_{\rm fuel}$ or $Q_{\rm sci}$. For ICF, this refers to $Q_{\rm sci}$.',
-    '$Q_{\rm eng}$': 'Engineering gain. The ratio of electrical power to the grid to recirculating power',
-    '$Q_{\rm fuel}$': 'Fuel gain. The ratio of fusion power to power absorbed by the fuel',
-    '$\langle Q_{\rm fuel} \rangle$': 'The volume-averaged fuel gain in the case of non-uniform profiles',
-    '$Q_{\rm sci}$': 'Scientific gain. The ratio of fusion power to externally applied heating power',
-    '$\langle Q_{\rm sci} \rangle$': 'The volume-averaged scientific gain in the case of non-uniform profiles',
-    '$Q_{\rm wp}$': 'Wall-plug gain. The ratio of fusion power to input electrical power from the grid',
-    '$S_{B}$': 'Bremsstrahlung power density',
-    '$S_{c}$': 'Fusion power density in charged particles',
-    '$S_{F}$': 'Fusion power density',
-    '$T$': 'Generic temperature, used to refer to either ion or electron temperature when $T_i=T_e$',
-    '$T_e$': 'Electron temperature',
-    '$T_{e0}$': 'Central electron temperature',
-    '$T_i$': 'Ion temperature',
-    '$T_{i0}$': 'Central ion temperature',
-    '$\langle T_i \rangle_{\rm n}$': 'Neutron-averaged ion temperature',
-    '$V$': 'Plasma volume',
-    '$Z$': 'Charge state of an ion',
-    '$Z_{\rm eff}$': 'The effective value of the charge state. The factor by which bremsstrahlung is increased as compared to a hydrogenic plasma, see Eq.~(\ref{eq:Z_eff}).',
-    '$\\bar{Z}$': 'Mean charge state, i.e., the ratio of electron to ion density in a quasi-neutral plasma',
-    '$\epsilon_F$': 'Total energy released per fusion reaction',
+    r'$E_{\rm abs}$': 'Externally applied energy absorbed by the fuel',
+    r'$f_c$': 'Energy fraction of fusion products in charged particles',
+    r'$n$': 'The generic density used to refer to either ion or electron density when $n_i=n_e$',
+    r'$n_e$': 'Electron density',
+    r'$n_{e0}$': 'Central electron density',
+    r'$n_i$': 'Ion density',
+    r'$n_{i0}$': 'Central ion density',
+    r'$(nT\tau)_{\rm ig, hs}^{\rm ICF}$': 'Temperature-dependent triple product required to achieve ICF hot-spot ignition.', 
+    r'$(n\tau)_{\rm ig, hs}^{\rm ICF}$': 'Temperature-dependent Lawson parameter required to achieve ICF hot-spot ignition.',
+    r'$p$': 'Plasma thermal pressure',
+    r'$P_{\rm abs}$': 'Externally applied power absorbed by the fuel',
+    r'$P_{B}$': 'Bremsstrahlung power',
+    r'$P_{c}$': 'Fusion power emitted as charged particles',
+    r'$P_{\rm ext}$': 'Externally applied heating power',
+    r'$P_{F}$': 'Fusion power',
+    r'$P_{n}$': 'Fusion power emitted as neutrons',
+    r'$P_{\rm out}$': 'Sum of all power exiting the plasma',
+    r'$Q$': 'Generic energy gain. For MCF, this can refer to $Q_{\rm fuel}$ or $Q_{\rm sci}$. For ICF, this refers to $Q_{\rm sci}$.',
+    r'$Q_{\rm eng}$': 'Engineering gain. The ratio of electrical power to the grid to recirculating power',
+    r'$Q_{\rm fuel}$': 'Fuel gain. The ratio of fusion power to power absorbed by the fuel',
+    r'$\langle Q_{\rm fuel} \rangle$': 'The volume-averaged fuel gain in the case of non-uniform profiles',
+    r'$Q_{\rm sci}$': 'Scientific gain. The ratio of fusion power to externally applied heating power',
+    r'$\langle Q_{\rm sci} \rangle$': 'The volume-averaged scientific gain in the case of non-uniform profiles',
+    r'$Q_{\rm wp}$': 'Wall-plug gain. The ratio of fusion power to input electrical power from the grid',
+    r'$S_{B}$': 'Bremsstrahlung power density',
+    r'$S_{c}$': 'Fusion power density in charged particles',
+    r'$S_{F}$': 'Fusion power density',
+    r'$T$': 'Generic temperature, used to refer to either ion or electron temperature when $T_i=T_e$',
+    r'$T_e$': 'Electron temperature',
+    r'$T_{e0}$': 'Central electron temperature',
+    r'$T_i$': 'Ion temperature',
+    r'$T_{i0}$': 'Central ion temperature',
+    r'$\langle T_i \rangle_{\rm n}$': 'Neutron-averaged ion temperature',
+    r'$V$': 'Plasma volume',
+    r'$Z$': 'Charge state of an ion',
+    r'$Z_{\rm eff}$': 'The effective value of the charge state. The factor by which bremsstrahlung is increased as compared to a hydrogenic plasma, see Eq.~(\ref{eq:Z_eff}).',
+    r'$\\bar{Z}$': 'Mean charge state, i.e., the ratio of electron to ion density in a quasi-neutral plasma',
+    r'$\epsilon_F$': 'Total energy released per fusion reaction',
     r'$\epsilon_{\alpha}$': r'Energy released in $\alpha$-particle per D-T fusion reaction',
-    '$\eta$': "The efficiency of recapturing thermal energy after the confinement duration in Lawson's second scenario",
-    '$\eta_{\rm abs}$': 'The efficiency of coupling externally applied power to the fuel',
-    '$\eta_{E}$': 'The efficiency of converting electrical recirculating power to externally applied heating power',
-    '$\eta_{\rm elec}$': 'The efficiency of converting total output power to electricity',
-    '$\eta_{\rm hs}$': 'The efficiency of coupling shell kinetic energy to hotspot thermal energy in laser ICF implosions',
-    '$\langle \sigma v \rangle_{ij}$': 'Temperature-dependent fusion reactivity between species $i$ and $j$ (cross section $\sigma$ times the relative velocity $v$ of ions averaged over a Maxwellian velocity distribution)',
-    '$\tau$': 'Pulse duration',
-    '$\tau_E$': 'Energy confinement time',
-    '$\tau_E^*$': 'Modified energy confinement time, which accounts for transient heating, see Sec.~\ref{sec:accounting_for_transient_effects}',
-    '$\tau_{\rm eff}$': 'Effective characteristic time combining pulse duration and energy confinement time, see Sec.~\ref{sec:extending_lawsons_second_scenario}',
+    r'$\eta$': "The efficiency of recapturing thermal energy after the confinement duration in Lawson's second scenario",
+    r'$\eta_{\rm abs}$': 'The efficiency of coupling externally applied power to the fuel',
+    r'$\eta_{E}$': 'The efficiency of converting electrical recirculating power to externally applied heating power',
+    r'$\eta_{\rm elec}$': 'The efficiency of converting total output power to electricity',
+    r'$\eta_{\rm hs}$': 'The efficiency of coupling shell kinetic energy to hotspot thermal energy in laser ICF implosions',
+    r'$\langle \sigma v \rangle_{ij}$': r'Temperature-dependent fusion reactivity between species $i$ and $j$ (cross section $\sigma$ times the relative velocity $v$ of ions averaged over a Maxwellian velocity distribution)',
+    r'$\tau$': 'Pulse duration',
+    r'$\tau_E$': 'Energy confinement time',
+    r'$\tau_E^*$': 'Modified energy confinement time, which accounts for transient heating, see Sec.~\ref{sec:accounting_for_transient_effects}',
+    r'$\tau_{\rm eff}$': 'Effective characteristic time combining pulse duration and energy confinement time, see Sec.~\ref{sec:extending_lawsons_second_scenario}',
 
 }
 print(definition_dict.keys)
@@ -2086,18 +2089,18 @@ fig.savefig(os.path.join('images', label_filename_dict['fig:Qeng_appendix']), bb
 # ## Efficiency table
 
 # %%
-efficiency_table_dict = {'Class':['MCF', 'MIF', 'Laser ICF (direct drive)', 'Laser ICF (indirect drive)'],
-                         '$\eta_{E}$':['0.7', '0.5', '0.1', '0.1'],
-                         '$\eta_{\rm abs}$':['0.9', '0.1', '0.064', '0.0087'],
-                         '$\eta_{\rm hs}$':['-', '-', '0.4', '0.65'],
-                         '$\eta_{\rm elec}$':['0.4', '0.4', '0.4', '0.4'],
+efficiency_table_dict = {r'Class':['MCF', 'MIF', 'Laser ICF (direct drive)', 'Laser ICF (indirect drive)'],
+                         r'$\eta_{E}$':['0.7', '0.5', '0.1', '0.1'],
+                         r'$\eta_{\rm abs}$':['0.9', '0.1', '0.064', '0.0087'],
+                         r'$\eta_{\rm hs}$':['-', '-', '0.4', '0.65'],
+                         r'$\eta_{\rm elec}$':['0.4', '0.4', '0.4', '0.4'],
                         }
 
-efficiency_table_rounded_dict = {'Class':['MCF', 'MIF', 'Laser ICF (direct drive)', 'Laser ICF (indirect drive)'],
-                         '$\eta_{E}$':['0.7', '0.5', '0.1', '0.1'],
-                         '$\eta_{\rm abs}$':['0.9', '0.1', '0.06', '0.009'],
-                         '$\eta_{\rm hs}$':['-', '-', '0.4', '0.7'],
-                         '$\eta_{\rm elec}$':['0.4', '0.4', '0.4', '0.4'],
+efficiency_table_rounded_dict = {r'Class':['MCF', 'MIF', 'Laser ICF (direct drive)', 'Laser ICF (indirect drive)'],
+                         r'$\eta_{E}$':['0.7', '0.5', '0.1', '0.1'],
+                         r'$\eta_{\rm abs}$':['0.9', '0.1', '0.06', '0.009'],
+                         r'$\eta_{\rm hs}$':['-', '-', '0.4', '0.7'],
+                         r'$\eta_{\rm elec}$':['0.4', '0.4', '0.4', '0.4'],
                         }
 efficiency_table_df = DataFrame.from_dict(efficiency_table_rounded_dict)
 efficiency_table_df
@@ -2292,7 +2295,7 @@ fig, ax = plt.subplots(dpi=dpi)
 fig.set_size_inches(3, 1) # custom size
 
 legend = [
-          '$\lambda_F(T_{i0})$'
+          r'$\lambda_F(T_{i0})$'
           #'$\\langle P_{F}( n(x),T(x) \\rangle / P_{F}(n(0), T(0))$',
           #'$P_{F}(\\langle n \\rangle, \\langle T \\rangle) / P_{F}(n(0), T(0))$'
           ]
@@ -2305,8 +2308,8 @@ power_fraction_df.plot(x='Temperature',
                        xlim=(0.3, 30),
                        ax=ax)
 ax.legend(legend)
-ax.set_xlabel('$T_{i0}$~(keV)')
-ax.set_ylabel('$\lambda_F$')
+ax.set_xlabel(r'$T_{i0}$~(keV)')
+ax.set_ylabel(r'$\lambda_F$')
 ax.set_xlabel(r'$T_{i0}$~(keV)')
 ax.xaxis.set_major_formatter(ticker.FuncFormatter(latexutils.CustomLogarithmicFormatter))
 
@@ -2317,7 +2320,7 @@ fig, ax = plt.subplots(dpi=dpi)
 fig.set_size_inches(3, 1) # custom size
 
 legend = [
-          '$\lambda_F(T_{i0})$'
+          r'$\lambda_F(T_{i0})$'
           #'$\\langle P_{F}( n(x),T(x) \\rangle / P_{F}(n(0), T(0))$',
           #'$P_{F}(\\langle n \\rangle, \\langle T \\rangle) / P_{F}(n(0), T(0))$'
           ]
@@ -2330,8 +2333,8 @@ power_fraction_df.plot(x='Temperature',
                        xlim=(0.3, 30),
                        ax=ax)
 ax.legend(legend)
-ax.set_xlabel('$T_{i0}$~(keV)')
-ax.set_ylabel('$\lambda_F$')
+ax.set_xlabel(r'$T_{i0}$~(keV)')
+ax.set_ylabel(r'$\lambda_F$')
 ax.set_xlabel(r'$T_{i0}$~(keV)')
 ax.xaxis.set_major_formatter(ticker.FuncFormatter(latexutils.CustomLogarithmicFormatter))
 
@@ -2670,6 +2673,10 @@ experimental_result_df['p_stag'] = experimental_result_df['p_stag']
 experimental_result_df['tau_stag'] = experimental_result_df['tau_stag'].astype(float)
 experimental_result_df.sort_values(by=['Year', 'Shot'], inplace=True)
 
+df = pd.DataFrame(experimental_result_df)
+df.to_csv(r'.\data\experimental_result_df.csv')
+df.to_json(r'.\web\experimental_result_df.json', indent=2, double_precision=15)
+
 # %% [markdown]
 # ### Split experimental results into separate MCF and MIF/ICF dataframes, define headers for dataframe and latex tables. 
 
@@ -2698,6 +2705,7 @@ mcf_airtable_latex_map = {
     'Z_eff': r'$\thead{Z_{eff} \\ }$',
     'tau_E_star': r'\thead{$\tau_{E}^{*}$ \\ (\si{s})}',
     'tau_E': r'\thead{$\tau_{E}$ \\ (\si{s})}$',
+    'Experimental Identifier':'Experimental Identifier',
 }
 
 # Mapping from what's calculated in this code to what should be printed in latex tables
@@ -2727,6 +2735,7 @@ icf_mif_airtable_latex_map = {
     'YOC': r'YOC',
     'p_stag': r'\thead{$p_{stag}$ \\ (\si{Gbar})}',
     'tau_stag': r'\thead{$\tau_{stag}$ \\ (\si{s})}',
+    'Experimental Identifier':'Experimental Identifier',
 }
 
 # Mapping from what's calculated in this code to what should be printed in latex tables
@@ -3318,6 +3327,9 @@ concept_dict = {'Tokamak': {'color': red,
                               'marker': 'x',
                               'markersize': 70,
                              }}
+
+df = pd.DataFrame(concept_dict)
+df.to_json(r'.\web\concept_dict.json')
 
 concept_list = ['Tokamak', 'Laser ICF', 'Stellarator', 'MagLIF', 'Spherical Tokamak', 'Z Pinch', 'FRC', 'Spheromak', 'Mirror', 'RFP', 'Pinch'] 
 
@@ -4171,6 +4183,11 @@ with plt.style.context('./styles/large.mplstyle', after_reset=True):
     (mcf_mif_icf_df['is_concept_record'] == True) | 
     (mcf_mif_icf_df['Shot'].isin(['N210808', 'N220919', 'N221204']))
     ]
+
+    df = pd.DataFrame(mcf_mif_icf_df)
+    df.to_json(r'.\web\mcf_mif_icf_df.json', indent=2, double_precision=15)
+    df.to_csv(r'.\data\mcf_mif_icf_df.csv')
+    
     #for concept in d['Concept Displayname'].unique():
     for concept in concept_list:
         # Draw datapoints
